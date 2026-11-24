@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="120" y2="120">
+      <stop offset="0%" stop-color="#0D3461"/>
+      <stop offset="100%" stop-color="#0FA3B1"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="60" fill="url(#bg1)"/>
+  <!-- Head & Hair -->
+  <circle cx="60" cy="46" r="22" fill="#FDDCB1"/>
+  <path d="M42 42C42 30 50 24 60 24C70 24 78 30 78 42C78 44 72 38 60 38C48 38 42 44 42 42Z" fill="#2C3E50"/>
+  <!-- Glasses (Data Scientist) -->
+  <rect x="47" y="44" width="10" height="7" rx="2" stroke="#0B2A4A" stroke-width="2" fill="none"/>
+  <rect x="63" y="44" width="10" height="7" rx="2" stroke="#0B2A4A" stroke-width="2" fill="none"/>
+  <line x1="57" y1="47" x2="63" y2="47" stroke="#0B2A4A" stroke-width="2"/>
+  <!-- Body / Hoodie -->
+  <path d="M26 106C26 82 42 74 60 74C78 74 94 82 94 106" fill="#1A4A73"/>
+  <path d="M50 78L60 92L70 78" stroke="#0FA3B1" stroke-width="2" fill="none"/>
+</svg>

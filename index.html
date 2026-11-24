@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DÖNGÜ — Evini tanıyan, kaçağı yakalayan, suyunu şehirde arıtıp yeniden kullanan akıllı şehir sistemi. Water AI Hackathon 2026." />
+  <meta name="theme-color" content="#0B2A4A" />
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/hm.svg" />
+  <title>DÖNGÜ — Akıllı Şehir & Su Geri Kazanım Sistemi</title>
+</head>
+<body>
+
+  <!-- ───────────────────── NAVBAR ───────────────────────── -->
+  <nav id="navbar" aria-label="Ana navigasyon">
+    <a href="#hero" class="nav-brand">
+      <img src="/assets/logos/hm-light.svg" alt="" class="nav-logo" width="30" height="30"> DÖNGÜ
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#solution">Çözüm</a></li>
+      <li><a href="#signatures">Yapay Zekâ</a></li>
+      <li><a href="#app">Su İzim</a></li>
+      <li><a href="#graywater">Arıtma</a></li>
+      <li><a href="#valuestream">Değer Akışı</a></li>
+      <li><a href="#simulation">Simülasyon</a></li>
+      <li><a href="#vision">Şehir</a></li>
+      <li><a href="#roadmap">Yol Haritası</a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <button id="btn-presentation-mode" class="btn btn-outline" style="padding:0.4em 0.9em; font-size:0.8rem; border-color:rgba(15,163,177,0.5);" title="Projeksiyon ve jüri sunumu için tam ekran slayt modu (Kısayol: F tuşu)">
+        🖥️ Sunum Modu (F)
+      </button>
+    </div>
+  </nav>
+
+  <!-- Sunum Modu Yüzen Kumandası (Aktifken görünür) -->
+  <div id="presentation-hud" style="display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999; background:rgba(11,42,74,0.95); border:1px solid var(--teal); border-radius:var(--radius-full); padding:0.5rem 1.25rem; backdrop-filter:blur(16px); box-shadow:var(--shadow-lg); align-items:center; gap:0.85rem;">
+    <button id="hud-prev" style="background:none; border:none; color:var(--white); font-size:1.1rem; cursor:pointer;" title="Önceki Slayt (Sol Ok)">◀</button>
+    <span id="hud-title" style="font-size:0.82rem; font-weight:700; color:var(--teal); min-width:130px; text-align:center;">Slayt 1 / 13</span>
+    <button id="hud-next" style="background:none; border:none; color:var(--white); font-size:1.1rem; cursor:pointer;" title="Sonraki Slayt (Sağ Ok / Boşluk)">▶</button>
+    <button id="hud-exit" style="background:none; border:none; color:var(--gray-300); font-size:0.8rem; cursor:pointer; margin-left:0.3rem;" title="Sunum Modundan Çık (Esc)">✕</button>
+  </div>
+
+  <!-- ─────────────── BÖLÜM 0: HERO ─────────────────────── -->
+  <section id="hero" aria-labelledby="hero-title">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <div class="hero-hack-card">
+        <img src="/assets/logos/hacklogo-kirpik.jpg" alt="Wilo Global Water AI Academy · Water AI Hackathon 2026" class="hero-hack-logo">
+      </div>
+      <h1 class="hero-project-name" id="hero-title">
+        <img src="/assets/logos/hm-light.svg" alt="" class="hero-mark" aria-hidden="true">
+        <span class="hero-name-text">DÖNGÜ</span>
+      </h1>
+      <p class="hero-slogan">Evini tanıyan, kaçağı yakalayan, suyunu yeniden kullanan akıllı şehir.</p>
+      <div class="video-slot video-slot-hero" data-video="intro"></div>
+      <div class="hero-badges">
+        <span class="hero-event-text">Water AI Hackathon 2026</span>
+        <div class="logo-row" id="hero-logos"></div>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">
+      <span>Aşağı kaydır</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 2: PROBLEM ───────────────────── -->
+  <section id="problem" aria-labelledby="problem-title">
+    <div class="container">
+<span class="section-eyebrow">Problem</span>
+      <h2 class="section-title" id="problem-title">Her damla sayılıyor,<br>ama nereye aktığını kimse saymıyor.</h2>
+      
+      <div class="problem-layout">
+        <div class="problem-text">
+          <p style="color:var(--gray-300); margin-bottom:1.25rem;">
+            Su faturası bize yalnızca <strong>ne kadar</strong> harcadığımızı söylüyor; <strong>nerede, ne zaman ve neden</strong> harcandığını asla söylemiyor.
+            Rezervuar sessizce akar, musluklar damlar ve en önemlisi: <strong>kullanılan su tek bir kanala karışıp kaybolur</strong>.
+            Az kirli duş suyu bile kanalizasyona giderek boşa harcanır.
+          </p>
+          <p style="color:var(--gray-300); margin-bottom:1.5rem;">
+            Türkiye'de kişi başı su miktarı hızla azalırken (2050 projeksiyonu 1.069 m³), mevcut şebekelerde ve konut içi tesisatlarda tonlarca su görünmez biçimde yitip gidiyor.
+          </p>
+
+          <div id="problem-stats-cards"></div>
+        </div>
+
+        <div class="water-chart-wrapper fade-up">
+          <div class="chart-title">Türkiye — Kişi Başı Kullanılabilir Su (m³/yıl)</div>
+          <canvas id="waterChart" aria-label="Yıllar içinde kişi başı su miktarı grafiği" role="img"></canvas>
+          <div class="scarcity-line-label">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <line x1="0" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="2" stroke-dasharray="3,2"/>
+            </svg>
+            Su fakirliği eşiği: 1.000 m³
+          </div>
+          <span class="source-label" id="chart-source-label">Kaynak: DSİ verilerine dayanan kurum yayınları</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 3: NEDEN ─────────────────────── -->
+  <section id="why" class="surface-mid" aria-labelledby="why-title">
+    <div class="container">
+<span class="section-eyebrow">Neden Oluyor?</span>
+      <h2 class="section-title" id="why-title">Dört köklü eksiklik</h2>
+      <p class="section-subtitle" style="margin-bottom:2.5rem;">Geleneksel su altyapısının göremediği, ev ile arıtma arasındaki kör noktalar.</p>
+      <div class="why-grid" id="why-grid" aria-label="Sorunun nedenleri"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 4: KÖPRÜ ─────────────────────── -->
+  <section id="bridge" aria-labelledby="bridge-title">
+    <div class="container">
+      <p class="bridge-big" id="bridge-title">
+        "Ölç → Tanı → Uyar → Arıt → Yeniden Kullan"
+      </p>
+      <p style="color:var(--gray-300); max-width:750px; margin:-1.5rem auto 2.5rem; font-size:1.1rem;">
+        Her dairenin sayacının yanına takılan küçük bir sensör, evin su alışkanlığını öğrenir. Kaçakta uyarır. Kullanılan su, il koşullarına göre kurulan ilçe ya da şehir arıtma tesislerinde arıtılıp yeniden şehre kazandırılır; herkes kendi suyunun ne kadarının geri döndüğünü uygulamada görür.
+      </p>
+      <div class="bridge-cols">
+        <div class="bridge-col fade-up">
+          <div class="bridge-col-icon">📡</div>
+          <h4>Dairede Ölç & İmzala</h4>
+          <p>Her musluğa değil, tek noktaya takılan sensörle yapay zekâ armatür ayrımı yapar.</p>
+        </div>
+        <div class="bridge-plus" aria-hidden="true">+</div>
+        <div class="bridge-col fade-up">
+          <div class="bridge-col-icon">🔄</div>
+          <h4>İlçede Arıt & Şehre Geri Kazandır</h4>
+          <p>Atık su, ilin ihtiyacına göre ilçe ya da şehir ölçeğindeki arıtma tesislerinde temizlenir ve yeniden kullanıma döner.</p>
+        </div>
+      </div>
+      <div class="bridge-conclusion fade-up">
+        Evden başlayıp şehre ölçeklenen kapalı su döngüsü. ↓
+      </div>
+      <div class="video-slot video-slot-center" data-video="solution"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 5: ÇÖZÜM (3D DENEYİMİ) ───────── -->
+  <section id="solution" aria-labelledby="solution-title">
+    <div class="container solution-intro">
+      <div class="section-head">
+        <div class="section-head-text">
+          <span class="section-eyebrow">Nasıl Ölçüyoruz? · 3D Deneyim</span>
+          <h2 class="section-title">Tek sensör, tüm ev</h2>
+          <p class="section-subtitle">Her musluğa ayrı sayaç takmak pahalı ve zahmetli. Biz evin su girişine, sayacın yanına tek bir akış ve basınç sensörü takıyoruz. Aşağı kaydırarak suyun sensörden yapay zekâya, oradan uygulamaya ve arıtmaya yolculuğunu izleyin.</p>
+        </div>
+        <div class="video-slot" data-video="measure"></div>
+      </div>
+    </div>
+    <div class="solution-sticky-wrapper" id="solution-wrapper">
+      <div class="solution-sticky">
+        <div class="solution-canvas-wrap" id="solution-canvas-wrap">
+          <canvas id="three-canvas" aria-hidden="true"></canvas>
+          <div id="three-fallback" style="display:none; padding:2rem; text-align:center;">
+            <div style="font-size:4rem; margin-bottom:1rem;">🔧</div>
+            <p style="color:var(--gray-300);">3D görünüm yüklenemedi.<br>Lütfen WebGL destekli modern bir tarayıcı kullanın.</p>
+          </div>
+        </div>
+        <div class="solution-steps-wrap" id="solution-steps" aria-label="DÖNGÜ çalışma adımları">
+          
+          <!-- Adım 0 -->
+          <div class="solution-step active" data-step="0" id="step-0">
+            <span class="step-number">Adım 1 / 6 · Akış</span>
+            <h2 class="step-title" id="solution-title">Su akar.</h2>
+            <p class="step-body">Evinize giren her damla su ana sayaçtan geçer. Geleneksel sayaçlar sadece faturadaki rakamı yazar; suyun nerede aktığını bilmez.</p>
+          </div>
+
+          <!-- Adım 1 -->
+          <div class="solution-step" data-step="1" id="step-1">
+            <span class="step-number">Adım 2 / 6 · Ölçüm</span>
+            <h2 class="step-title">Sensör dinler & basıncı tartar.</h2>
+            <p class="step-body">Mevcut sayaca dokunmadan yanına takılan küçük akış ve basınç sensörü, saniyede bir ölçüm yapar. Boruyu kesmeye veya her musluğa sensör takmaya gerek yoktur.</p>
+          </div>
+
+          <!-- Adım 2 -->
+          <div class="solution-step" data-step="2" id="step-2">
+            <span class="step-number">Adım 3 / 6 · İletişim</span>
+            <h2 class="step-title">Veri yola çıkar.</h2>
+            <p class="step-body">Her musluk açıldığında borularda karakteristik bir basınç dalgası oluşur. Sensör bu dalgayı yakalar ve kablosuz olarak yapay zekâ işlemcisine ulaştırır.</p>
+          </div>
+
+          <!-- Adım 3 -->
+          <div class="solution-step" data-step="3" id="step-3">
+            <span class="step-number">Adım 4 / 6 · Yapay Zekâ</span>
+            <h2 class="step-title">Su imzası çözülür.</h2>
+            <p class="step-body">HydroSense mantığıyla çalışan YZ; akış süresi, darbe frekansı ve debiden cihazı %97,9 doğrulukla tanır: Tuvalet, duş, çamaşır makinesi veya mutfak musluğu ayrıştırılır.</p>
+          </div>
+
+          <!-- Adım 4 -->
+          <div class="solution-step" data-step="4" id="step-4">
+            <span class="step-number">Adım 5 / 6 · Mobil Uygulama</span>
+            <h2 class="step-title">Su İzim uygulamasında görürsün.</h2>
+            <p class="step-body">120 L ulusal hedefle karşılaştırma, harcama dağılımı ve 3 seviyeli kaçak uyarısı tek ekranda. Kaçak anında telefon uyarı verir.</p>
+            <div class="phone-mockup" id="phone-mockup" aria-label="Su İzim Mobil Uygulama Önizlemesi" role="img">
+              <div class="phone-screen" id="phone-screen"></div>
+            </div>
+            <span style="font-size:0.72rem; color:var(--gray-500); display:block; margin-top:0.4rem;">
+              * TL rakamları örnektir; tarife şehre göre güncellenebilir.
+            </span>
+          </div>
+
+          <!-- Adım 5 -->
+          <div class="solution-step" data-step="5" id="step-5">
+            <span class="step-number">Adım 6 / 6 · Arıtma & Döngü</span>
+            <h2 class="step-title">Su kaybolmaz, arıtılıp geri döner.</h2>
+            <p class="step-body">Evden çıkan su, il koşullarına göre kurulan ilçe ya da şehir ölçeğindeki arıtma tesisine ulaşır. Arıtılan su park ve yeşil alan sulamasında, sokak temizliğinde ve sanayide yeniden kullanılır. Su İzim uygulamasında kendi kullandığınız suyun ne kadarının arıtılıp şehre geri döndüğünü görürsünüz.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM: SU İMZASI & HYDROSENSE ───────── -->
+  <section id="signatures" class="surface-mid" aria-labelledby="sig-title">
+    <div class="container">
+      <span class="section-eyebrow">Yapay Zekâ Metodolojisi</span>
+      <h2 class="section-title" id="sig-title">Yapay zekâ "mutfak mı, tuvalet mi" nasıl anlıyor?</h2>
+      <p class="section-subtitle">
+        Her musluk açılıp kapandığında boru tesisatında kendine özgü bir basınç ve akış dalgası oluşur.
+        Washington Üniversitesi'nin HydroSense araştırması, tek bir noktadan %97,9 doğrulukla armatür tanınabildiğini kanıtlamıştır.
+      </p>
+
+
+      <div class="grid-4" id="signatures-grid" style="margin:2.5rem 0;" aria-label="Su imzası türleri"></div>
+
+      <!-- Öğrenme Dönemi ve İstisnalar Banner -->
+      <div class="card" style="margin-top:2rem; background:rgba(15,163,177,0.06); border-color:rgba(15,163,177,0.25);">
+        <h3 style="color:var(--teal); margin-bottom:1rem; font-size:1.3rem;">🧠 2–4 Haftalık Öğrenme Dönemi ve İstisnalar</h3>
+        <div class="grid-2" style="gap:2rem;">
+          <div>
+            <h4 style="margin-bottom:0.4rem;">Evin Kendi Normali Oluşur</h4>
+            <p style="font-size:0.92rem; color:var(--gray-300); line-height:1.6;">
+              Uygulama ilk haftalarda mikro-sorularla evi öğrenir: <em>"Az önce 8 litre kullanıldı; bu neydi? Tuvalet / Duş / Mutfak"</em>.
+              Böylece her evin haftalık ritmi, uyanma saati ve su alışkanlığı kişiselleşir.
+            </p>
+          </div>
+          <div>
+            <h4 style="margin-bottom:0.4rem;">Hayatın İstisnalarını Anlar</h4>
+            <p style="font-size:0.92rem; color:var(--gray-300); line-height:1.6;">
+              <strong>Vardiyalı Çalışma:</strong> Gece çalışan kullanıcı sabah kullanımını normalleştirir.<br>
+              <strong>Tatil Modu:</strong> "5 gün evde yokum" dendiğinde 1 damlalık akış dahi acil alarma dönüşür.<br>
+              <strong>Misafir / Temizlik:</strong> Cumartesi günleri çamaşır döngüsü arıza sanılmaz.
+            </p>
+          </div>
+        </div>
+        <div class="video-slot video-slot-inline" data-video="exceptions"></div>
+      </div>
+
+      <!-- 3 Seviyeli Uyarı Kartları -->
+      <div style="margin-top:3rem;">
+        <div class="section-head">
+          <div class="section-head-text">
+            <span class="section-eyebrow">Kaçak & Arıza Yönetimi</span>
+            <h3 style="margin-bottom:1rem;">Kaçağı fatura gelmeden yakala</h3>
+            <p class="section-subtitle" style="font-size:1rem;">Dört işarete bakıyoruz: evin normaline uymayan uzun akış, gece sıfıra inmeyen kullanım, bilinen hiçbir kullanıma benzemeyen akış imzası ve “evde yokum” denilen saatlerde görülen akış. Bina ölçeğinde de ana sayaç ile dairelerin toplamı karşılaştırılarak ortak tesisat kaçağı bulunur.</p>
+          </div>
+          <div class="video-slot" data-video="alerts"></div>
+        </div>
+        <div class="grid-3" id="alert-levels-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM: SU İZİM UYGULAMASI ──────────── -->
+  <section id="app" aria-labelledby="app-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <span class="section-eyebrow">Mobil Uygulama</span>
+          <h2 class="section-title" id="app-title">Su faturanız artık bir sayı değil, bir hikâye.</h2>
+          <p class="section-subtitle"><strong>Su İzim</strong>, evinizin su ayak izini cebinize getirir: nerede, ne zaman, ne kadar su kullandığınızı gösterir, kaçakta uyarır ve kullandığınız suyun ne kadarının arıtılıp geri döndüğünü görünür kılar.</p>
+        </div>
+        <div class="video-slot" data-video="app"></div>
+      </div>
+      <div class="grid-4 app-grid" id="app-features" aria-label="Uygulama özellikleri"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM: İLÇE/ŞEHİR ARITMA & DÖNGÜ ORANI ─── -->
+  <section id="graywater" class="surface-mid" aria-labelledby="gw-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <span class="section-eyebrow">Arıtma & Geri Kazanım</span>
+          <h2 class="section-title" id="gw-title">Su kaybolmasın, arıtılıp şehre dönsün.</h2>
+          <p class="section-subtitle">
+            Arıtma binalarda değil, il koşullarına göre kurulan ilçe ya da şehir ölçeğindeki tesislerde yapılır. Daire sensörlerinden gelen anonim veri, tesise ne zaman ne kadar su geleceğini önceden gösterir; uygulama da herkese kendi suyunun ne kadarının geri döndüğünü söyler.
+          </p>
+        </div>
+        <div class="video-slot" data-video="graywater"></div>
+      </div>
+
+      <div class="grid-2" style="margin:2.5rem 0; gap:2.5rem; align-items:center;">
+        <div>
+          <div class="card" style="margin-bottom:1.25rem;">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <span style="font-size:2rem;">🗺️</span>
+              <div>
+                <h4 style="color:var(--teal);">İl Koşullarına Göre Ölçek</h4>
+                <p style="font-size:0.9rem; color:var(--gray-300);">Nüfusu yoğun büyükşehirlerde ilçe bazlı tesisler, daha küçük illerde tek bir şehir tesisi kurulur. Mevcut atık su arıtma tesisleri ileri arıtma ile genişletilebilir.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:1.25rem;">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <span style="font-size:2rem;">🌳</span>
+              <div>
+                <h4 style="color:var(--green);">Geri Kazanım: Şehre Dönen Su</h4>
+                <p style="font-size:0.9rem; color:var(--gray-300);">Arıtılan su park ve yeşil alan sulamasında, sokak temizliğinde, sanayide ve itfaiye rezervinde kullanılır. Böylece bu işler için içme suyu harcanmaz.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:1.25rem;">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <span style="font-size:2rem;">📱</span>
+              <div>
+                <h4 style="color:var(--teal-light);">Uygulamada Kendi Döngünüz</h4>
+                <p style="font-size:0.9rem; color:var(--gray-300);">Su İzim, kullandığınız suyun ne kadarının ilçenizin tesisinde arıtılıp şehre geri döndüğünü <strong>Döngü Oranı</strong> olarak gösterir.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <span style="font-size:2rem;">⚙️</span>
+              <div>
+                <h4 style="color:var(--amber);">Wilo Pompalar & Yük Tahmini</h4>
+                <p style="font-size:0.9rem; color:var(--gray-300);">Yapay zekâ, dairelerden gelen anonim kullanım verisiyle tesise gelecek atık su yükünü saat saat tahmin eder; pompa ve arıtma kademeleri buna göre çalışır.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- İnteraktif İlçe Döngü Hesaplayıcı -->
+        <div class="card" style="background:rgba(15,163,177,0.08); border:2px solid rgba(15,163,177,0.3); padding:2rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; gap:0.75rem; flex-wrap:wrap;">
+            <h3 style="font-size:1.3rem; color:var(--white);">İlçe Döngü Hesaplayıcı</h3>
+            <span class="source-label text-teal">Örnek senaryo</span>
+          </div>
+
+          <div style="margin-bottom:1.25rem;">
+            <label for="calc-pop" style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--gray-300); margin-bottom:0.4rem;">
+              <span>İlçe nüfusu</span>
+              <strong style="color:var(--teal); font-size:1rem;" id="calc-pop-val">200.000</strong>
+            </label>
+            <input type="range" id="calc-pop" min="20000" max="1000000" step="10000" value="200000" class="sim-slider" style="width:100%;">
+          </div>
+
+          <div style="margin-bottom:1.5rem;">
+            <label for="calc-rate" style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--gray-300); margin-bottom:0.4rem;">
+              <span>Arıtılıp geri kazanılan pay</span>
+              <strong style="color:var(--teal); font-size:1rem;" id="calc-rate-val">%15</strong>
+            </label>
+            <input type="range" id="calc-rate" min="5" max="60" step="1" value="15" class="sim-slider" style="width:100%;">
+          </div>
+
+          <div class="grid-2" style="gap:1rem; text-align:center; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid rgba(255,255,255,0.1);">
+            <div style="background:rgba(0,0,0,0.25); padding:0.9rem; border-radius:var(--radius-md);">
+              <div style="font-size:0.75rem; color:var(--gray-300);">Aylık geri kazanılan su</div>
+              <div style="font-size:1.6rem; font-weight:800; color:var(--teal);" id="calc-month-m3">–</div>
+              <div style="font-size:0.75rem; color:var(--green);" id="calc-pools">–</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.25); padding:0.9rem; border-radius:var(--radius-md);">
+              <div style="font-size:0.75rem; color:var(--gray-300);">Kişi başı geri dönen</div>
+              <div style="font-size:1.6rem; font-weight:800; color:var(--green);" id="calc-person-l">–</div>
+              <div style="font-size:0.75rem; color:var(--amber);" id="calc-day-m3">–</div>
+            </div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-500); margin-top:1rem; text-align:center;">
+            * Varsayım: kişi başı günde 130 L su; bunun ~%90'ı atık su olarak tesise ulaşır. Türkiye'nin 2030 hedefi, arıtılmış atık suyun %15'inin yeniden kullanılmasıdır.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM: DEĞER AKIŞ HARİTASI ─────────── -->
+  <section id="valuestream" aria-labelledby="vsm-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <span class="section-eyebrow">Suyun Değer Akış Haritası</span>
+          <h2 class="section-title" id="vsm-title">Bir damlanın yolculuğu</h2>
+          <p class="section-subtitle">Su nerede değer kazanıyor, nerede kayboluyor? Değer akış haritası, üretimde israfı bulmak için kullanılan bir yalın yönetim aracı. Biz bu aracı suya uyguladık ve bir dairenin suyunu barajdan kanalizasyona kadar takip ettik. Düğmelerle bugünü ve DÖNGÜ ile yarını karşılaştırın.</p>
+        </div>
+        <div class="video-slot" data-video="valuestream"></div>
+      </div>
+      <div class="card vsm" id="vsm-root"></div>
+      <h3 class="vsm-wastes-title">Haritada görünen yedi su israfı</h3>
+      <ol class="vsm-wastes" id="vsm-wastes"></ol>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 6: YZ NEREDE ─────────────────── -->
+  <section id="ai-section" class="surface-mid" aria-labelledby="ai-title">
+    <div class="container">
+<div class="section-head">
+        <div class="section-head-text">
+      <span class="section-eyebrow">Yapay Zekâ Katmanı</span>
+      <h2 class="section-title" id="ai-title">Yapay zekâ tam olarak nerede?</h2>
+      <p class="section-subtitle">Üç kritik noktada &mdash; jargonsuz ve somut değer üreten algoritma yapısı.</p>
+        </div>
+        <div class="video-slot" data-video="ai-section"></div>
+      </div>
+      <div class="ai-grid" id="ai-grid" aria-label="Yapay zekâ kullanım alanları"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 7: SİMÜLASYON ─────────────────── -->
+  <section id="simulation" aria-labelledby="sim-title">
+    <div class="container">
+<div class="section-head">
+        <div class="section-head-text">
+      <span class="section-eyebrow">Etkileşimli Simülasyon</span>
+      <h2 class="section-title" id="sim-title">Kendin dene: Algoritmaları yarıştır</h2>
+      <p class="section-subtitle">Sentetik 24 saatlik veri üzerinde üç yöntemi karşılaştırın.</p>
+        </div>
+        <div class="video-slot" data-video="simulation"></div>
+      </div>
+      <div style="margin-top:1rem;">
+        <span class="sim-label">Simülasyon: Sentetik Veri</span>
+      </div>
+
+      <div class="sim-controls" role="group" aria-label="Simülasyon kontrolleri">
+        <div class="sim-control-group">
+          <label for="leak-toggle">Gizli Kaçak Başlat</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="leak-toggle" role="switch" aria-checked="false">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="sim-control-group" id="leak-size-group" style="opacity:0.4; pointer-events:none;">
+          <label for="leak-size">Kaçak Büyüklüğü: <span id="leak-size-val">küçük</span></label>
+          <input type="range" class="sim-slider" id="leak-size" min="1" max="3" step="1" value="1" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+        </div>
+        <div class="sim-control-group">
+          <label for="night-person">Gece Uyanık Biri Var</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="night-person" role="switch" aria-checked="false">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="sim-control-group">
+          <label for="graywater-toggle" style="color:var(--green);">🔄 İlçe Arıtma Döngüsü</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="graywater-toggle" role="switch" aria-checked="false">
+            <span class="toggle-slider" style="background:rgba(46,158,107,0.2);"></span>
+          </label>
+        </div>
+        <button class="btn btn-outline" id="sim-reset-btn" style="margin-left:auto;" aria-label="Simülasyonu sıfırla">
+          Sıfırla
+        </button>
+      </div>
+
+      <div class="sim-chart-wrap">
+        <canvas id="simChart" aria-label="24 saatlik debi simülasyonu" role="img"></canvas>
+      </div>
+
+      <div class="method-cards" id="method-cards" role="list" aria-label="Yöntem karşılaştırması">
+        <div class="method-card threshold" role="listitem">
+          <h4>🔔 Sabit Eşik (0,5 L/dk)</h4>
+          <p id="threshold-desc">Yalnızca 0,5 L/dk üzerini görür.</p>
+          <div class="method-status status-ok" id="threshold-status">✓ Alarm yok</div>
+        </div>
+        <div class="method-card night-rule" role="listitem">
+          <h4>🌙 "Gece Sıfır" Kuralı</h4>
+          <p id="night-rule-desc">Gece akış varsa hemen kaçak sayar.</p>
+          <div class="method-status status-ok" id="night-rule-status">✓ Alarm yok</div>
+        </div>
+        <div class="method-card sunabzi" role="listitem">
+          <h4>💧 DÖNGÜ (Öğrenen Model)</h4>
+          <p id="sunabzi-desc">Binanın ve kullanıcının ritmini bilir.</p>
+          <div class="method-status status-ok" id="sunabzi-status">✓ Normal</div>
+        </div>
+      </div>
+
+      <div class="sim-bill-card" aria-live="polite" aria-label="Tahmini fatura bilgisi">
+        <div>
+          <div style="font-size:0.8rem; color:var(--gray-300); margin-bottom:0.25rem;">Tahmini Aylık Fatura</div>
+          <div class="sim-bill-amount" id="sim-bill">— TL</div>
+          <div style="font-size:0.72rem; color:var(--gray-500); margin-top:0.25rem;">
+            * Örnek tarife; gerçek su tarifesi belediyeye göre değişir
+          </div>
+        </div>
+        <div style="font-size:0.85rem; color:var(--gray-300); max-width:35ch;" id="sim-bill-note">
+          Kaçak başlatın ve tahmini faturanın nasıl değiştiğini görün.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM: MALİYET & UYGULANABİLİRLİK ──── -->
+  <section id="cost" class="surface-deep" aria-labelledby="cost-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <span class="section-eyebrow">Maliyet & Uygulanabilirlik</span>
+          <h2 class="section-title" id="cost-title">Ucuz, ölçeklenebilir, uygulanabilir</h2>
+          <p class="section-subtitle">Evde yalnızca küçük bir sensör var; pahalı olan arıtma ise ilçe ya da şehir ölçeğinde, mümkün olduğunda mevcut atık su arıtma tesislerinin genişletilmesiyle yapılır. Büyük tesislerde metreküp başına maliyet düşer ve yatırım binlerce haneye yayılır.</p>
+        </div>
+        <div class="video-slot" data-video="cost"></div>
+      </div>
+      <div class="cost-grid" id="cost-principles"></div>
+      <h3 class="cost-sub">Kim kazanır?</h3>
+      <div class="winners" id="cost-winners"></div>
+      <p class="vsm-note">Sensör ve arıtma ünitesi birim maliyetleri pilot çalışmada yerel tedarikçilerle netleştirilecektir.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 9: VİZYON (ŞEHİR ÖLÇEĞİ) ─────── -->
+  <section id="vision" aria-labelledby="vision-title">
+    <div class="container">
+<div class="section-head">
+        <div class="section-head-text">
+      <span class="section-eyebrow">Büyüme Vizyonu · Şehirler Odağı</span>
+      <h2 class="section-title" id="vision-title">Daireden Şehre Büyüyen Su Aklı</h2>
+      <p class="section-subtitle">Projemiz yalnızca bir ev projesi değil; daireden başlayıp ilçe arıtma tesislerine ve akıllı kente uzanan bir şehir vizyonudur.</p>
+        </div>
+        <div class="video-slot" data-video="vision"></div>
+      </div>
+
+      <div class="vision-zoom" id="vision-zoom" aria-hidden="true">
+        <div class="zoom-stage">
+          <div class="zoom-bubble" id="zoom-1">🏠</div>
+          <div class="zoom-label">1. Daire</div>
+        </div>
+        <div class="zoom-arrow">→</div>
+        <div class="zoom-stage">
+          <div class="zoom-bubble" id="zoom-2">🏢</div>
+          <div class="zoom-label">2. Bina</div>
+        </div>
+        <div class="zoom-arrow">→</div>
+        <div class="zoom-stage">
+          <div class="zoom-bubble" id="zoom-3">🏘️</div>
+          <div class="zoom-label">3. İlçe</div>
+        </div>
+        <div class="zoom-arrow">→</div>
+        <div class="zoom-stage">
+          <div class="zoom-bubble" id="zoom-4">🌆</div>
+          <div class="zoom-label">4. Şehir</div>
+        </div>
+      </div>
+
+      <div class="vision-grid" id="vision-grid" aria-label="Vizyon adımları"></div>
+
+      <!-- Akıllı Şehir & Mahalle Su Kayıp Haritası (SCADA Paneli) -->
+      <div id="city-heatmap-container" style="margin-top:3.5rem;"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM: YOL HARİTASI ────────────────── -->
+  <section id="roadmap" class="surface-mid" aria-labelledby="roadmap-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <span class="section-eyebrow">Yol Haritası</span>
+          <h2 class="section-title" id="roadmap-title">Prototipten şehre</h2>
+          <p class="section-subtitle">Küçük başlayıp, ölçerek ve öğrenerek büyüyoruz.</p>
+        </div>
+        <div class="video-slot" data-video="roadmap"></div>
+      </div>
+      <ol class="roadmap" id="roadmap-list"></ol>
+    </div>
+  </section>
+
+  <!-- ─────────────── BÖLÜM 10: KAPANIS ─────────────────────── -->
+  <section id="closing" aria-labelledby="closing-title">
+    <div class="closing-bg" aria-hidden="true"></div>
+    <div class="container" style="position:relative; z-index:2;">
+      <blockquote class="closing-quote" id="closing-title">
+        "DÖNGÜ: Her damlayı ölçen, her evi tanıyan, kaçağı anında yakalayan ve kullanılan suyu şehirde arıtıp yeniden hayata döndüren akıllı şehir."
+      </blockquote>
+
+      <p style="font-size:1.1rem; color:var(--teal-light); margin-top:-1.5rem; margin-bottom:2rem;">
+        "Su faturasını bir sayıdan bir hikâyeye, kaybolan suyu da bir kaynağa dönüştürüyoruz."
+      </p>
+
+      <div class="video-slot video-slot-center" data-video="closing"></div>
+      <div class="logo-row" id="closing-logos" style="justify-content:center; margin-top:2rem;"></div>
+      <div class="closing-team-name">
+        <img src="/assets/logos/hm-light.svg" alt="" aria-hidden="true">
+        <span>HydraMind Ekibi</span>
+      </div>
+
+      <div class="footer-line">
+        Water AI Hackathon 2026 &mdash; HydraMind Ekibi &middot; DÖNGÜ Projesi &mdash; Wilo Türkiye & imece &mdash; Tüm içerik sunum ve yarışma amaçlıdır.
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

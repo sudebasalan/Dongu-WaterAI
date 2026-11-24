@@ -1,0 +1,23 @@
+DÖNGÜ — HydraMind Ekibi · Web sitesi
+=====================================
+
+1) Node.js kurulu değilse kurun:  https://nodejs.org  →  "LTS" sürümü.
+   Kurduktan sonra VS Code'u kapatıp yeniden açın.
+
+2) Bu zip'i çıkarın (sağ tık → "Tümünü ayıkla").
+
+3) VS Code → File → Open Folder → içinde package.json olan
+   "DONGU-HydraMind" klasörünü seçin.
+
+4) Terminal → New Terminal açıp sırayla yazın:
+      npm install
+      npm run dev
+
+5) Tarayıcıda site açılır. Açılmazsa adres çubuğuna yazın:
+      http://localhost:5173
+
+Sorun çıkarsa:
+- "npm tanınmıyor / not recognized"  → Node.js kurulu değil ya da VS Code yeniden başlatılmadı.
+- "Could not read package.json"     → Terminal yanlış klasörde. "cd DONGU-HydraMind" yazıp tekrar deneyin.
+- "running scripts is disabled"      → Komutları "npm.cmd install" ve "npm.cmd run dev" şeklinde yazın.
+- Durdurmak için terminalde Ctrl+C.
